@@ -10,6 +10,8 @@ COZE_KNOW_PAGE = 'https://www.coze.com/space/xxx'
 # TXT上传文件的最大数量
 COZE_TXT_UPLOAD_MAX_SIZE = 10
 
+SKIP_MAX_UNIT_SIZE = True
+
 HAD_UPLOAD_FILE_PATH = [
     # "4_fc4a71d3e484ce9f",
 ]

@@ -60,7 +60,7 @@ if len(files) == 0:
     print('no file found')
     sys.exit()
 
-if len(files) > 100:
+if not config.SKIP_MAX_UNIT_SIZE and len(files) > 100:
     print('Coze每个知识库只支持100个unit，也就是100个文件')
     sys.exit()
 
@@ -84,6 +84,7 @@ if chunk_size > 10:
     chunk_size = 10
 
 # 上传失败的文件（目前并没有做到识别某个具体的文件上传失败，而是这个批次只要失败了就会都放到失败列表）
+success_upload_files = []
 fail_upload_files = []
 for index, file_chunk in enumerate(chunked_list(files, chunk_size), start=1):
     # 过滤之前已经上传过的文件列表
@@ -135,6 +136,11 @@ for index, file_chunk in enumerate(chunked_list(files, chunk_size), start=1):
         confirm_btn_xpath = '//*[@id="root"]/div[2]/section/section/main/div/div/div[2]/div/div/div[3]/button'
         confirm_btn = confirm_wait.until(EC.presence_of_element_located((By.XPATH, confirm_btn_xpath)))
         confirm_btn.click()
+
+        success_upload_files.extend(file_chunk)
+        if len(success_upload_files) >= 100:
+            print('over max size, exit')
+            sys.exit()
 
         time.sleep(5)
     except Exception as e:
